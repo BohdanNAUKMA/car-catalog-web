@@ -1,0 +1,2001 @@
+{
+    "info": {
+        "_postman_id": "20f81459-84d6-50c7-a4e1-69ba5f26f5f1",
+        "name": "Car Catalog API (AutoHub)",
+        "description": "REST API каталогу автомобілів AutoHub (Django + DRF).\n\nЗмінна {{base_url}} за замовчуванням — http://127.0.0.1:8000. Змінні {{brand_id}} та {{car_id}} заповнюються автоматично запитами створення. Запускайте колекцію цілком (Run collection) або папки по черзі згори донизу.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Бренди",
+            "description": "CRUD-операції над брендами (виробниками).",
+            "item": [
+                {
+                    "name": "Список брендів",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                ""
+                            ]
+                        },
+                        "description": "Повертає всі бренди з кількістю авто (carsCount)."
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        ""
+                                    ]
+                                },
+                                "description": "Повертає всі бренди з кількістю авто (carsCount)."
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[\n    {\n        \"id\": 2,\n        \"name\": \"BMW\",\n        \"country\": \"Німеччина\",\n        \"description\": \"Німецький преміум-виробник автомобілів та мотоциклів.\",\n        \"carsCount\": 2\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Skoda\",\n        \"country\": \"Чехія\",\n        \"description\": \"Чеський виробник практичних сімейних автомобілів.\",\n        \"carsCount\": 1\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Tesla\",\n        \"country\": \"США\",\n        \"description\": \"Американський виробник електромобілів.\",\n        \"carsCount\": 1\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Toyota\",\n        \"country\": \"Японія\",\n        \"description\": \"Японський виробник надійних автомобілів.\",\n        \"carsCount\": 2\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Створити бренд",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Відповідь містить id\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"id\");",
+                                    "    pm.collectionVariables.set(\"brand_id\", json.id);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                ""
+                            ]
+                        },
+                        "description": "Створює бренд і зберігає його id у змінну {{brand_id}}.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Німецький преміум-виробник автомобілів.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "201 Created",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        ""
+                                    ]
+                                },
+                                "description": "Створює бренд і зберігає його id у змінну {{brand_id}}.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Німецький преміум-виробник автомобілів.\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 5,\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Німецький преміум-виробник автомобілів.\",\n    \"carsCount\": 0\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Отримати бренд за id",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 5,\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Німецький преміум-виробник автомобілів.\",\n    \"carsCount\": 0\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Оновити бренд (PUT)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                ""
+                            ]
+                        },
+                        "description": "Повне оновлення: поле name є обов'язковим.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Преміальні автомобілі з повним приводом quattro.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        ""
+                                    ]
+                                },
+                                "description": "Повне оновлення: поле name є обов'язковим.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Преміальні автомобілі з повним приводом quattro.\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 5,\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Преміальні автомобілі з повним приводом quattro.\",\n    \"carsCount\": 0\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Частково оновити бренд (PATCH)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                ""
+                            ]
+                        },
+                        "description": "Часткове оновлення: передаються лише змінені поля.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"description\": \"Оновлений опис бренду та історія компанії.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        ""
+                                    ]
+                                },
+                                "description": "Часткове оновлення: передаються лише змінені поля.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"description\": \"Оновлений опис бренду та історія компанії.\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 5,\n    \"name\": \"Audi\",\n    \"country\": \"Німеччина\",\n    \"description\": \"Оновлений опис бренду та історія компанії.\",\n    \"carsCount\": 0\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Автомобілі бренду",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/cars/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                "cars",
+                                ""
+                            ]
+                        },
+                        "description": "Усі автомобілі обраного бренду."
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/cars/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        "cars",
+                                        ""
+                                    ]
+                                },
+                                "description": "Усі автомобілі обраного бренду."
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[]"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Автомобілі",
+            "description": "CRUD-операції, фільтрація, сортування та пагінація.",
+            "item": [
+                {
+                    "name": "Створити автомобіль",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Відповідь містить id\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"id\");",
+                                    "    pm.collectionVariables.set(\"car_id\", json.id);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                ""
+                            ]
+                        },
+                        "description": "Створює авто для бренду {{brand_id}} і зберігає id у {{car_id}}.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"brandId\": {{brand_id}},\n    \"model\": \"A6\",\n    \"year\": 2022,\n    \"price\": 41500,\n    \"bodyType\": \"sedan\",\n    \"fuelType\": \"petrol\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 21000,\n    \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "201 Created",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        ""
+                                    ]
+                                },
+                                "description": "Створює авто для бренду {{brand_id}} і зберігає id у {{car_id}}.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"brandId\": {{brand_id}},\n    \"model\": \"A6\",\n    \"year\": 2022,\n    \"price\": 41500,\n    \"bodyType\": \"sedan\",\n    \"fuelType\": \"petrol\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 21000,\n    \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 7,\n    \"brand\": {\n        \"id\": 5,\n        \"name\": \"Audi\"\n    },\n    \"brandId\": 5,\n    \"model\": \"A6\",\n    \"year\": 2022,\n    \"price\": 41500.0,\n    \"bodyType\": \"sedan\",\n    \"fuelType\": \"petrol\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 21000,\n    \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\",\n    \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Список автомобілів",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                ""
+                            ]
+                        },
+                        "description": "Перша сторінка каталогу (12 авто за замовчуванням)."
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        ""
+                                    ]
+                                },
+                                "description": "Перша сторінка каталогу (12 авто за замовчуванням)."
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"data\": [\n        {\n            \"id\": 7,\n            \"brand\": {\n                \"id\": 5,\n                \"name\": \"Audi\"\n            },\n            \"brandId\": 5,\n            \"model\": \"A6\",\n            \"year\": 2022,\n            \"price\": 41500.0,\n            \"bodyType\": \"sedan\",\n            \"fuelType\": \"petrol\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 21000,\n            \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n            \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\",\n            \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n        },\n        {\n            \"id\": 6,\n            \"brand\": {\n                \"id\": 4,\n                \"name\": \"Skoda\"\n            },\n            \"brandId\": 4,\n            \"model\": \"Octavia\",\n            \"year\": 2018,\n            \"price\": 15400.0,\n            \"bodyType\": \"wagon\",\n            \"fuelType\": \"diesel\",\n            \"transmission\": \"manual\",\n            \"mileage\": 134000,\n            \"description\": \"Економічний сімейний універсал з великим багажником.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-06T13:00:00+03:00\"\n        },\n        {\n            \"id\": 5,\n            \"brand\": {\n                \"id\": 3,\n                \"name\": \"Tesla\"\n            },\n            \"brandId\": 3,\n            \"model\": \"Model 3\",\n            \"year\": 2023,\n            \"price\": 38900.0,\n            \"bodyType\": \"sedan\",\n            \"fuelType\": \"electric\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 12000,\n            \"description\": \"Long Range, автопілот, запас ходу до 560 км.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-05T13:00:00+03:00\"\n        },\n        {\n            \"id\": 4,\n            \"brand\": {\n                \"id\": 2,\n                \"name\": \"BMW\"\n            },\n            \"brandId\": 2,\n            \"model\": \"320i\",\n            \"year\": 2019,\n            \"price\": 27800.0,\n            \"bodyType\": \"sedan\",\n            \"fuelType\": \"petrol\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 82000,\n            \"description\": \"Задній привід, шкіряний салон, обслуговування в офіційного дилера.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-04T13:00:00+03:00\"\n        },\n        {\n            \"id\": 3,\n            \"brand\": {\n                \"id\": 2,\n                \"name\": \"BMW\"\n            },\n            \"brandId\": 2,\n            \"model\": \"X5\",\n            \"year\": 2020,\n            \"price\": 52000.0,\n            \"bodyType\": \"suv\",\n            \"fuelType\": \"diesel\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 67000,\n            \"description\": \"Комплектація M Sport, панорамний дах, адаптивна підвіска.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-03T13:00:00+03:00\"\n        },\n        {\n            \"id\": 2,\n            \"brand\": {\n                \"id\": 1,\n                \"name\": \"Toyota\"\n            },\n            \"brandId\": 1,\n            \"model\": \"RAV4\",\n            \"year\": 2022,\n            \"price\": 31000.0,\n            \"bodyType\": \"suv\",\n            \"fuelType\": \"hybrid\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 28000,\n            \"description\": \"Повний привід, стан нового автомобіля, максимальна комплектація.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-02T13:00:00+03:00\"\n        },\n        {\n            \"id\": 1,\n            \"brand\": {\n                \"id\": 1,\n                \"name\": \"Toyota\"\n            },\n            \"brandId\": 1,\n            \"model\": \"Camry\",\n            \"year\": 2021,\n            \"price\": 24500.0,\n            \"bodyType\": \"sedan\",\n            \"fuelType\": \"petrol\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 45000,\n            \"description\": \"Офіційний автомобіль в ідеальному технічному стані, один власник, повна сервісна книга.\",\n            \"imageUrl\": \"\",\n            \"createdAt\": \"2026-10-01T13:00:00+03:00\"\n        }\n    ],\n    \"pagination\": {\n        \"totalItems\": 7,\n        \"currentPage\": 1,\n        \"totalPages\": 1\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Список автомобілів з фільтрами та сортуванням",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/?search=a6&brandId={{brand_id}}&fuelType=petrol&bodyType=sedan&sort=price_asc&page=1&limit=12",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "a6"
+                                },
+                                {
+                                    "key": "brandId",
+                                    "value": "{{brand_id}}"
+                                },
+                                {
+                                    "key": "fuelType",
+                                    "value": "petrol"
+                                },
+                                {
+                                    "key": "bodyType",
+                                    "value": "sedan"
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "price_asc"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "12"
+                                }
+                            ]
+                        },
+                        "description": "search — пошук за назвою моделі; brandId — фільтр за брендом; fuelType: petrol | diesel | electric | hybrid; bodyType: sedan | suv | hatchback | wagon | coupe | convertible | minivan | pickup; sort: price_asc | price_desc | year_asc | year_desc | mileage_asc | mileage_desc | newest; page, limit (1–100)."
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/?search=a6&brandId={{brand_id}}&fuelType=petrol&bodyType=sedan&sort=price_asc&page=1&limit=12",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        ""
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "search",
+                                            "value": "a6"
+                                        },
+                                        {
+                                            "key": "brandId",
+                                            "value": "{{brand_id}}"
+                                        },
+                                        {
+                                            "key": "fuelType",
+                                            "value": "petrol"
+                                        },
+                                        {
+                                            "key": "bodyType",
+                                            "value": "sedan"
+                                        },
+                                        {
+                                            "key": "sort",
+                                            "value": "price_asc"
+                                        },
+                                        {
+                                            "key": "page",
+                                            "value": "1"
+                                        },
+                                        {
+                                            "key": "limit",
+                                            "value": "12"
+                                        }
+                                    ]
+                                },
+                                "description": "search — пошук за назвою моделі; brandId — фільтр за брендом; fuelType: petrol | diesel | electric | hybrid; bodyType: sedan | suv | hatchback | wagon | coupe | convertible | minivan | pickup; sort: price_asc | price_desc | year_asc | year_desc | mileage_asc | mileage_desc | newest; page, limit (1–100)."
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"data\": [\n        {\n            \"id\": 7,\n            \"brand\": {\n                \"id\": 5,\n                \"name\": \"Audi\"\n            },\n            \"brandId\": 5,\n            \"model\": \"A6\",\n            \"year\": 2022,\n            \"price\": 41500.0,\n            \"bodyType\": \"sedan\",\n            \"fuelType\": \"petrol\",\n            \"transmission\": \"automatic\",\n            \"mileage\": 21000,\n            \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n            \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\",\n            \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n        }\n    ],\n    \"pagination\": {\n        \"totalItems\": 1,\n        \"currentPage\": 1,\n        \"totalPages\": 1\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Отримати автомобіль за id",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "{{car_id}}",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "{{car_id}}",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 7,\n    \"brand\": {\n        \"id\": 5,\n        \"name\": \"Audi\"\n    },\n    \"brandId\": 5,\n    \"model\": \"A6\",\n    \"year\": 2022,\n    \"price\": 41500.0,\n    \"bodyType\": \"sedan\",\n    \"fuelType\": \"petrol\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 21000,\n    \"description\": \"Комплектація S line, матрична оптика, віртуальна панель приладів.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6.jpg\",\n    \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Оновити автомобіль (PUT)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "{{car_id}}",
+                                ""
+                            ]
+                        },
+                        "description": "Повне оновлення: brandId, model, year, price, mileage є обов'язковими.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"brandId\": {{brand_id}},\n    \"model\": \"A6 Avant\",\n    \"year\": 2022,\n    \"price\": 39900,\n    \"bodyType\": \"wagon\",\n    \"fuelType\": \"diesel\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 23000,\n    \"description\": \"Ціну знижено! Комплект зимової гуми у подарунок.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6-avant.jpg\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "{{car_id}}",
+                                        ""
+                                    ]
+                                },
+                                "description": "Повне оновлення: brandId, model, year, price, mileage є обов'язковими.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"brandId\": {{brand_id}},\n    \"model\": \"A6 Avant\",\n    \"year\": 2022,\n    \"price\": 39900,\n    \"bodyType\": \"wagon\",\n    \"fuelType\": \"diesel\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 23000,\n    \"description\": \"Ціну знижено! Комплект зимової гуми у подарунок.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6-avant.jpg\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 7,\n    \"brand\": {\n        \"id\": 5,\n        \"name\": \"Audi\"\n    },\n    \"brandId\": 5,\n    \"model\": \"A6 Avant\",\n    \"year\": 2022,\n    \"price\": 39900.0,\n    \"bodyType\": \"wagon\",\n    \"fuelType\": \"diesel\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 23000,\n    \"description\": \"Ціну знижено! Комплект зимової гуми у подарунок.\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6-avant.jpg\",\n    \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Частково оновити автомобіль (PATCH)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "{{car_id}}",
+                                ""
+                            ]
+                        },
+                        "description": "Зміна ціни, пробігу або опису.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"price\": 38500,\n    \"mileage\": 23500,\n    \"description\": \"Ціну знижено ще раз!\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "200 OK",
+                            "originalRequest": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "{{car_id}}",
+                                        ""
+                                    ]
+                                },
+                                "description": "Зміна ціни, пробігу або опису.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"price\": 38500,\n    \"mileage\": 23500,\n    \"description\": \"Ціну знижено ще раз!\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"id\": 7,\n    \"brand\": {\n        \"id\": 5,\n        \"name\": \"Audi\"\n    },\n    \"brandId\": 5,\n    \"model\": \"A6 Avant\",\n    \"year\": 2022,\n    \"price\": 38500.0,\n    \"bodyType\": \"wagon\",\n    \"fuelType\": \"diesel\",\n    \"transmission\": \"automatic\",\n    \"mileage\": 23500,\n    \"description\": \"Ціну знижено ще раз!\",\n    \"imageUrl\": \"https://example.com/cars/audi-a6-avant.jpg\",\n    \"createdAt\": \"2026-11-03T19:50:28.879900+02:00\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Негативні сценарії",
+            "description": "Помилки 400, 404 та 409 в єдиному форматі {\"error\": \"...\", \"details\": {...}}.",
+            "item": [
+                {
+                    "name": "400 — бренд без назви",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 400\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                ""
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"\",\n    \"country\": \"Італія\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "400 Bad Request",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        ""
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"\",\n    \"country\": \"Італія\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Помилка валідації даних.\",\n    \"details\": {\n        \"name\": [\n            \"Це поле не може бути порожнім.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "400 — бренд з назвою, що вже існує",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 400\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                ""
+                            ]
+                        },
+                        "description": "Назва бренду унікальна без урахування регістру.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"audi\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "400 Bad Request",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        ""
+                                    ]
+                                },
+                                "description": "Назва бренду унікальна без урахування регістру.",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"audi\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Помилка валідації даних.\",\n    \"details\": {\n        \"name\": [\n            \"Бренд з такою назвою вже існує.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "400 — невалідні дані автомобіля",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 400\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                ""
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"brandId\": 999999,\n    \"model\": \"\",\n    \"year\": 1800,\n    \"price\": -100,\n    \"fuelType\": \"coal\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "400 Bad Request",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        ""
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"brandId\": 999999,\n    \"model\": \"\",\n    \"year\": 1800,\n    \"price\": -100,\n    \"fuelType\": \"coal\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Помилка валідації даних.\",\n    \"details\": {\n        \"brandId\": [\n            \"Бренд з id=999999 не існує.\"\n        ],\n        \"model\": [\n            \"Це поле не може бути порожнім.\"\n        ],\n        \"year\": [\n            \"Переконайтесь, що значення більше або дорівнює 1886.\"\n        ],\n        \"price\": [\n            \"Переконайтесь, що значення більше або дорівнює 0.\"\n        ],\n        \"fuelType\": [\n            \"\\\"coal\\\" не є коректним вибором.\"\n        ],\n        \"mileage\": [\n            \"Це поле обов'язкове.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "400 — некоректні параметри фільтрації",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 400\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/?sort=cheapest&fuelType=coal&page=0",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "sort",
+                                    "value": "cheapest"
+                                },
+                                {
+                                    "key": "fuelType",
+                                    "value": "coal"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "0"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "400 Bad Request",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/?sort=cheapest&fuelType=coal&page=0",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        ""
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "sort",
+                                            "value": "cheapest"
+                                        },
+                                        {
+                                            "key": "fuelType",
+                                            "value": "coal"
+                                        },
+                                        {
+                                            "key": "page",
+                                            "value": "0"
+                                        }
+                                    ]
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Помилка валідації даних.\",\n    \"details\": {\n        \"fuelType\": [\n            \"\\\"coal\\\" не є коректним вибором.\"\n        ],\n        \"sort\": [\n            \"\\\"cheapest\\\" не є коректним вибором.\"\n        ],\n        \"page\": [\n            \"Переконайтесь, що значення більше або дорівнює 1.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "404 — неіснуючий автомобіль",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/999999/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "999999",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "404 Not Found",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/999999/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "999999",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "Not Found",
+                            "code": 404,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Автомобіль з id=999999 не знайдено.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "404 — оновлення неіснуючого автомобіля",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/999999/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "999999",
+                                ""
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"price\": 10000\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "404 Not Found",
+                            "originalRequest": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/999999/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "999999",
+                                        ""
+                                    ]
+                                },
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"price\": 10000\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Not Found",
+                            "code": 404,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Автомобіль з id=999999 не знайдено.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "404 — неіснуючий бренд",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/999999/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "999999",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "404 Not Found",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/999999/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "999999",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "Not Found",
+                            "code": 404,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Бренд з id=999999 не знайдено.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "409 — видалення бренду, що має автомобілі",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 409\", function () {",
+                                    "    pm.response.to.have.status(409);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                ""
+                            ]
+                        },
+                        "description": "Бренд {{brand_id}} має пов'язане авто {{car_id}}, тому видалення заборонене."
+                    },
+                    "response": [
+                        {
+                            "name": "409 Conflict",
+                            "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        ""
+                                    ]
+                                },
+                                "description": "Бренд {{brand_id}} має пов'язане авто {{car_id}}, тому видалення заборонене."
+                            },
+                            "status": "Conflict",
+                            "code": 409,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Неможливо видалити бренд «Audi»: з ним пов'язано автомобілів — 1. Спочатку видаліть або перенесіть ці автомобілі до іншого бренду.\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Видалення",
+            "description": "Успішне видалення створених записів (запускати останнім).",
+            "item": [
+                {
+                    "name": "Видалити автомобіль",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 204\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "{{car_id}}",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "204 No Content",
+                            "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "{{car_id}}",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "No Content",
+                            "code": 204,
+                            "_postman_previewlanguage": "text",
+                            "header": [],
+                            "cookie": [],
+                            "body": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Видалити бренд (без автомобілів)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 204\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "brands",
+                                "{{brand_id}}",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "204 No Content",
+                            "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/brands/{{brand_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "brands",
+                                        "{{brand_id}}",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "No Content",
+                            "code": 204,
+                            "_postman_previewlanguage": "text",
+                            "header": [],
+                            "cookie": [],
+                            "body": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "404 — отримати видалений автомобіль",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Статус 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Єдиний формат помилки: ключ error\", function () {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json).to.have.property(\"error\");",
+                                    "    pm.expect(json.error).to.be.a(\"string\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "cars",
+                                "{{car_id}}",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "404 Not Found",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/api/v1/cars/{{car_id}}/",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "v1",
+                                        "cars",
+                                        "{{car_id}}",
+                                        ""
+                                    ]
+                                }
+                            },
+                            "status": "Not Found",
+                            "code": 404,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"error\": \"Автомобіль з id=7 не знайдено.\"\n}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        },
+        {
+            "key": "brand_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "car_id",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}

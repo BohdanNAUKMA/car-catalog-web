@@ -1,0 +1,140 @@
+[
+  {
+    "model": "catalog.brand",
+    "pk": 1,
+    "fields": {
+      "name": "Toyota",
+      "country": "Японія",
+      "description": "Японський виробник надійних автомобілів."
+    }
+  },
+  {
+    "model": "catalog.brand",
+    "pk": 2,
+    "fields": {
+      "name": "BMW",
+      "country": "Німеччина",
+      "description": "Німецький преміум-виробник автомобілів та мотоциклів."
+    }
+  },
+  {
+    "model": "catalog.brand",
+    "pk": 3,
+    "fields": {
+      "name": "Tesla",
+      "country": "США",
+      "description": "Американський виробник електромобілів."
+    }
+  },
+  {
+    "model": "catalog.brand",
+    "pk": 4,
+    "fields": {
+      "name": "Skoda",
+      "country": "Чехія",
+      "description": "Чеський виробник практичних сімейних автомобілів."
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 1,
+    "fields": {
+      "brand": 1,
+      "model": "Camry",
+      "year": 2021,
+      "price": "24500.00",
+      "body_type": "sedan",
+      "fuel_type": "petrol",
+      "transmission": "automatic",
+      "mileage": 45000,
+      "description": "Офіційний автомобіль в ідеальному технічному стані, один власник, повна сервісна книга.",
+      "image_url": "",
+      "created_at": "2026-10-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 2,
+    "fields": {
+      "brand": 1,
+      "model": "RAV4",
+      "year": 2022,
+      "price": "31000.00",
+      "body_type": "suv",
+      "fuel_type": "hybrid",
+      "transmission": "automatic",
+      "mileage": 28000,
+      "description": "Повний привід, стан нового автомобіля, максимальна комплектація.",
+      "image_url": "",
+      "created_at": "2026-10-02T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 3,
+    "fields": {
+      "brand": 2,
+      "model": "X5",
+      "year": 2020,
+      "price": "52000.00",
+      "body_type": "suv",
+      "fuel_type": "diesel",
+      "transmission": "automatic",
+      "mileage": 67000,
+      "description": "Комплектація M Sport, панорамний дах, адаптивна підвіска.",
+      "image_url": "",
+      "created_at": "2026-10-03T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 4,
+    "fields": {
+      "brand": 2,
+      "model": "320i",
+      "year": 2019,
+      "price": "27800.00",
+      "body_type": "sedan",
+      "fuel_type": "petrol",
+      "transmission": "automatic",
+      "mileage": 82000,
+      "description": "Задній привід, шкіряний салон, обслуговування в офіційного дилера.",
+      "image_url": "",
+      "created_at": "2026-10-04T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 5,
+    "fields": {
+      "brand": 3,
+      "model": "Model 3",
+      "year": 2023,
+      "price": "38900.00",
+      "body_type": "sedan",
+      "fuel_type": "electric",
+      "transmission": "automatic",
+      "mileage": 12000,
+      "description": "Long Range, автопілот, запас ходу до 560 км.",
+      "image_url": "",
+      "created_at": "2026-10-05T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.car",
+    "pk": 6,
+    "fields": {
+      "brand": 4,
+      "model": "Octavia",
+      "year": 2018,
+      "price": "15400.00",
+      "body_type": "wagon",
+      "fuel_type": "diesel",
+      "transmission": "manual",
+      "mileage": 134000,
+      "description": "Економічний сімейний універсал з великим багажником.",
+      "image_url": "",
+      "created_at": "2026-10-06T10:00:00Z"
+    }
+  }
+]

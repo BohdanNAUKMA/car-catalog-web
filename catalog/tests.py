@@ -1,15 +1,27 @@
+from datetime import timedelta
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.permissions import BasePermission
+from rest_framework.response import Response
+from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import Brand, Car
+
+User = get_user_model()
 
 
 class CatalogAPITestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            username='manager', email='manager@example.com',
+            password='StrongPass123!',
+        )
         cls.toyota = Brand.objects.create(name='Toyota', country='Японія')
         cls.bmw = Brand.objects.create(name='BMW', country='Німеччина')
         cls.empty_brand = Brand.objects.create(name='Audi')
@@ -40,6 +52,13 @@ class CatalogAPITestCase(APITestCase):
             fuel_type=Car.FuelType.DIESEL,
             mileage=67000,
         )
+
+    def setUp(self):
+        self.authenticate()
+
+    def authenticate(self):
+        token = AccessToken.for_user(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
 
     def assert_error_format(self, response, expected_status):
         self.assertEqual(response.status_code, expected_status)
@@ -255,7 +274,7 @@ class CarAPITests(CatalogAPITestCase):
         self.assertNotIn('Access-Control-Allow-Origin', response.headers)
 
 
-class ErrorFormatTests(APITestCase):
+class ErrorFormatTests(CatalogAPITestCase):
     def test_unknown_url_returns_json_error(self):
         response = self.client.get('/api/v1/unknown/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -268,3 +287,120 @@ class ErrorFormatTests(APITestCase):
             response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED
         )
         self.assertIn('error', response.data)
+
+    def test_permission_denied_uses_unified_format(self):
+        class DenyAll(BasePermission):
+            def has_permission(self, request, view):
+                return False
+
+        class RestrictedView(APIView):
+            permission_classes = [DenyAll]
+
+            def get(self, request):
+                return Response({})
+
+        token = AccessToken.for_user(self.user)
+        request = APIRequestFactory().get(
+            '/restricted/', HTTP_AUTHORIZATION=f'Bearer {token}'
+        )
+        response = RestrictedView.as_view()(request)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data, {'error': 'Недостатньо прав'})
+
+
+class CatalogPermissionTests(CatalogAPITestCase):
+    AUTH_REQUIRED = {'error': 'Потрібна авторизація'}
+
+    def setUp(self):
+        self.client.credentials()
+
+    def assert_auth_required(self, response):
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data, self.AUTH_REQUIRED)
+        self.assertIn('Bearer', response.headers['WWW-Authenticate'])
+
+    def test_public_read_endpoints_available_without_token(self):
+        urls = [
+            reverse('brand-list'),
+            reverse('brand-detail', args=[self.toyota.pk]),
+            reverse('brand-cars', args=[self.toyota.pk]),
+            reverse('car-list'),
+            reverse('car-detail', args=[self.camry.pk]),
+        ]
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_brand_write_requires_token(self):
+        detail_url = reverse('brand-detail', args=[self.empty_brand.pk])
+        requests = [
+            ('post', reverse('brand-list'), {'name': 'Honda'}),
+            ('put', detail_url, {'name': 'Audi AG'}),
+            ('patch', detail_url, {'country': 'Німеччина'}),
+            ('delete', detail_url, None),
+        ]
+        for method, url, payload in requests:
+            with self.subTest(method=method):
+                response = getattr(self.client, method)(
+                    url, payload, format='json'
+                )
+                self.assert_auth_required(response)
+        self.assertFalse(Brand.objects.filter(name='Honda').exists())
+        self.assertTrue(
+            Brand.objects.filter(pk=self.empty_brand.pk).exists()
+        )
+
+    def test_car_write_requires_token(self):
+        detail_url = reverse('car-detail', args=[self.camry.pk])
+        requests = [
+            ('post', reverse('car-list'), {'model': 'Corolla'}),
+            ('put', detail_url, {'model': 'Camry'}),
+            ('patch', detail_url, {'price': 1}),
+            ('delete', detail_url, None),
+        ]
+        for method, url, payload in requests:
+            with self.subTest(method=method):
+                response = getattr(self.client, method)(
+                    url, payload, format='json'
+                )
+                self.assert_auth_required(response)
+        self.camry.refresh_from_db()
+        self.assertEqual(self.camry.price, Decimal('24500'))
+
+    def test_invalid_token_is_rejected(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer invalid.token')
+        response = self.client.post(
+            reverse('brand-list'), {'name': 'Honda'}, format='json'
+        )
+        self.assert_auth_required(response)
+
+    def test_expired_token_is_rejected(self):
+        token = AccessToken.for_user(self.user)
+        token.set_exp(lifetime=-timedelta(minutes=1))
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        response = self.client.delete(
+            reverse('car-detail', args=[self.camry.pk])
+        )
+        self.assert_auth_required(response)
+        self.assertTrue(Car.objects.filter(pk=self.camry.pk).exists())
+
+    def test_write_allowed_with_valid_token(self):
+        self.authenticate()
+        response = self.client.post(
+            reverse('brand-list'), {'name': 'Honda'}, format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_cors_preflight_allows_authorization_header(self):
+        response = self.client.options(
+            reverse('car-list'),
+            HTTP_ORIGIN='http://127.0.0.1:5500',
+            HTTP_ACCESS_CONTROL_REQUEST_METHOD='DELETE',
+            HTTP_ACCESS_CONTROL_REQUEST_HEADERS='authorization,content-type',
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn(
+            'authorization',
+            response.headers['Access-Control-Allow-Headers'].lower(),
+        )

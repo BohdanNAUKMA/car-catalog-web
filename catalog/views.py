@@ -3,10 +3,12 @@ import math
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .exceptions import Conflict, build_error_body
+from config.exceptions import Conflict, build_error_body
+
 from .models import Brand, Car
 from .serializers import BrandSerializer, CarListQuerySerializer, CarSerializer
 
@@ -62,7 +64,11 @@ def paginate(queryset, page, limit):
     return queryset[offset:offset + limit], pagination
 
 
-class BrandListView(APIView):
+class CatalogAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class BrandListView(CatalogAPIView):
     def get(self, request):
         brands = Brand.objects.with_cars_count()
         serializer = BrandSerializer(brands, many=True)
@@ -75,7 +81,7 @@ class BrandListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class BrandDetailView(APIView):
+class BrandDetailView(CatalogAPIView):
     def get(self, request, pk):
         serializer = BrandSerializer(get_brand_or_404(pk))
         return Response(serializer.data)
@@ -105,7 +111,7 @@ class BrandDetailView(APIView):
         return Response(serializer.data)
 
 
-class BrandCarsView(APIView):
+class BrandCarsView(CatalogAPIView):
     def get(self, request, pk):
         brand = get_brand_or_404(pk)
         cars = brand.cars.select_related('brand')
@@ -113,7 +119,7 @@ class BrandCarsView(APIView):
         return Response(serializer.data)
 
 
-class CarListView(APIView):
+class CarListView(CatalogAPIView):
     def get(self, request):
         query = CarListQuerySerializer(data=request.query_params)
         query.is_valid(raise_exception=True)
@@ -133,7 +139,7 @@ class CarListView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CarDetailView(APIView):
+class CarDetailView(CatalogAPIView):
     def get(self, request, pk):
         serializer = CarSerializer(get_car_or_404(pk))
         return Response(serializer.data)

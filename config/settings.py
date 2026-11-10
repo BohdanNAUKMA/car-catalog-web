@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'catalog',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -99,13 +102,26 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'UNAUTHENTICATED_USER': None,
-    'EXCEPTION_HANDLER': 'catalog.exceptions.unified_exception_handler',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'EXCEPTION_HANDLER': 'config.exceptions.unified_exception_handler',
     'COERCE_DECIMAL_TO_STRING': False,
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(
+        minutes=int(os.environ.get('JWT_ACCESS_TOKEN_MINUTES', '15'))
+    ),
+    'REFRESH_TOKEN_LIFETIME': timedelta(
+        days=int(os.environ.get('JWT_REFRESH_TOKEN_DAYS', '7'))
+    ),
+    'ROTATE_REFRESH_TOKENS': False,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'UPDATE_LAST_LOGIN': True,
 }
 
 CORS_ALLOWED_ORIGINS = [
